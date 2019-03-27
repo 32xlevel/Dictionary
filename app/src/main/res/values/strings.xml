@@ -3,4 +3,9 @@
     <string name="ru_word_edit_hint">Слово</string>
     <string name="en_word_edit_hint">Перевод</string>
     <string name="hints">Предложения:</string>
+    <string name="add_word_title">Добавить слово</string>
+    <string name="delete_word_title">Удалить слово</string>
+    <string name="edit_word_title">Изменить слово</string>
+    <string name="add_button_text">Добавить</string>
+    <string name="edit_button_text">Редактировать</string>
 </resources>
