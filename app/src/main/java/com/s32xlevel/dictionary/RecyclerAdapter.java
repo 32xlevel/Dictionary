@@ -16,6 +16,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
 
     interface Listener {
         void onClick(int position);
+        boolean onLongClick(int position);
     }
 
     private Listener listener;
@@ -64,8 +65,18 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
             @Override
             public void onClick(View v) {
                 if (listener != null) {
-                    listener.onClick(position);
+                    listener.onClick(position + 1); // +1 for correct work with db
                 }
+            }
+        });
+
+        viewHolder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                if (listener != null) {
+                    return listener.onLongClick(position + 1); // +1 for correct work with db
+                }
+                return false;
             }
         });
     }
