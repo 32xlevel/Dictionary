@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Dictionary</string>
+    <string name="app_name">Словарь</string>
     <string name="ru_word_edit_hint">Слово</string>
     <string name="en_word_edit_hint">Перевод</string>
     <string name="hints">Предложения:</string>

@@ -10,8 +10,7 @@ import android.widget.Button;
 
 public class EditActivity extends AppCompatActivity {
 
-    public static final String EXTRA_RU_WORD = "ru_word";
-    public static final String EXTRA_EN_WORD = "en_word";
+    public static final String EXTRA_WORD_ID = "wordId";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -20,7 +19,7 @@ public class EditActivity extends AppCompatActivity {
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         // correct toolbar title
-        toolbar.setTitle(getIntent().getStringExtra(EditActivity.EXTRA_RU_WORD) != null ?
+        toolbar.setTitle(getIntent().getIntExtra(EditActivity.EXTRA_WORD_ID, -1) != -1 ?
                 getString(R.string.edit_word_title) : getString(R.string.add_word_title));
         setSupportActionBar(toolbar);
         fillCorrectTextForButton();
@@ -28,7 +27,7 @@ public class EditActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        if (getIntent().getStringExtra(EditActivity.EXTRA_RU_WORD) != null) {
+        if (getIntent().getIntExtra(EditActivity.EXTRA_WORD_ID, -1) != -1) {
             getMenuInflater().inflate(R.menu.edit_menu, menu);
         }
         return super.onCreateOptionsMenu(menu);
@@ -54,7 +53,7 @@ public class EditActivity extends AppCompatActivity {
     private void fillCorrectTextForButton() {
         Button button = findViewById(R.id.add_edit_button);
 
-        button.setText(getIntent().getStringExtra(EditActivity.EXTRA_RU_WORD) != null ?
+        button.setText(getIntent().getIntExtra(EditActivity.EXTRA_WORD_ID, -1) != -1 ?
                 R.string.edit_button_text : R.string.add_button_text);
     }
 }
