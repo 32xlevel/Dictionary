@@ -46,11 +46,13 @@ public class EditActivity extends AppCompatActivity {
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
+    public boolean onOptionsItemSelected(MenuItem item) throws SQLiteException {
         switch (item.getItemId()) {
             case R.id.action_delete_word: {
-
-                // TODO: Код по удалению слова
+                db = new DBHelper(this).getWritableDatabase();
+                db.delete("dictionary",
+                        "_id = ?",
+                        new String[]{String.valueOf(getIntent().getIntExtra(EditActivity.EXTRA_WORD_ID, -1))});
 
                 Intent intent = new Intent(this, MainActivity.class);
                 startActivity(intent);
@@ -77,9 +79,9 @@ public class EditActivity extends AppCompatActivity {
         db = helper.getReadableDatabase();
 
         Cursor cursor = db.query("dictionary",
-                new String[] {"ru_word", "en_word"},
+                new String[]{"ru_word", "en_word"},
                 "_id = ?",
-                new String[] {String.valueOf(getIntent().getIntExtra(EditActivity.EXTRA_WORD_ID, -1))},
+                new String[]{String.valueOf(getIntent().getIntExtra(EditActivity.EXTRA_WORD_ID, -1))},
                 null,
                 null,
                 "ru_word");
@@ -94,7 +96,7 @@ public class EditActivity extends AppCompatActivity {
 
     public void onClickAddEditButton(View view) throws SQLiteException {
         int wordId = getIntent().getIntExtra(EditActivity.EXTRA_WORD_ID, -1);
-        db = new DBHelper(this).getReadableDatabase();
+        db = new DBHelper(this).getWritableDatabase();
         EditText ruWordEdit = findViewById(R.id.ru_word_edit);
         EditText enWordEdit = findViewById(R.id.en_word_edit);
 
@@ -104,7 +106,7 @@ public class EditActivity extends AppCompatActivity {
             ContentValues contentValues = new ContentValues();
             contentValues.put("ru_word", ruWordEdit.getText().toString());
             contentValues.put("en_word", enWordEdit.getText().toString());
-            db.update("dictionary", contentValues, "_id = ?", new String[] {String.valueOf(wordId)});
+            db.update("dictionary", contentValues, "_id = ?", new String[]{String.valueOf(wordId)});
         }
 
         Intent intent = new Intent(this, MainActivity.class);
