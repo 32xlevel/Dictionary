@@ -54,10 +54,7 @@ public class EditActivity extends AppCompatActivity {
     private void fillCorrectTextForButton() {
         Button button = findViewById(R.id.add_edit_button);
 
-        if (getIntent().getStringExtra(EditActivity.EXTRA_RU_WORD) != null) {
-            button.setText(R.string.edit_button_text);
-        } else {
-            button.setText(R.string.add_button_text);
-        }
+        button.setText(getIntent().getStringExtra(EditActivity.EXTRA_RU_WORD) != null ?
+                R.string.edit_button_text : R.string.add_button_text);
     }
 }
