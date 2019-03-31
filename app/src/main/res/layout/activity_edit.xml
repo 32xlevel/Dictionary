@@ -43,6 +43,7 @@
         android:id="@+id/add_edit_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="end"/>
+        android:layout_gravity="end"
+        android:onClick="onClickAddEditButton"/>
 
 </LinearLayout>

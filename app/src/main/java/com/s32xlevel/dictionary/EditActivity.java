@@ -1,5 +1,6 @@
 package com.s32xlevel.dictionary;
 
+import android.content.ContentValues;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -9,12 +10,15 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
 public class EditActivity extends AppCompatActivity {
 
     public static final String EXTRA_WORD_ID = "wordId";
+
+    private SQLiteDatabase db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,7 +74,7 @@ public class EditActivity extends AppCompatActivity {
         EditText enWordEdit = findViewById(R.id.en_word_edit);
 
         DBHelper helper = new DBHelper(this);
-        SQLiteDatabase db = helper.getReadableDatabase();
+        db = helper.getReadableDatabase();
 
         Cursor cursor = db.query("dictionary",
                 new String[] {"ru_word", "en_word"},
@@ -86,5 +90,24 @@ public class EditActivity extends AppCompatActivity {
         }
 
         cursor.close();
+    }
+
+    public void onClickAddEditButton(View view) throws SQLiteException {
+        int wordId = getIntent().getIntExtra(EditActivity.EXTRA_WORD_ID, -1);
+        db = new DBHelper(this).getReadableDatabase();
+        EditText ruWordEdit = findViewById(R.id.ru_word_edit);
+        EditText enWordEdit = findViewById(R.id.en_word_edit);
+
+        if (wordId == -1) {
+            DBHelper.insertWord(db, ruWordEdit.getText().toString(), enWordEdit.getText().toString());
+        } else {
+            ContentValues contentValues = new ContentValues();
+            contentValues.put("ru_word", ruWordEdit.getText().toString());
+            contentValues.put("en_word", enWordEdit.getText().toString());
+            db.update("dictionary", contentValues, "_id = ?", new String[] {String.valueOf(wordId)});
+        }
+
+        Intent intent = new Intent(this, MainActivity.class);
+        startActivity(intent);
     }
 }

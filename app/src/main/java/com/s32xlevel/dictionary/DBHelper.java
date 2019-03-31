@@ -31,7 +31,7 @@ public class DBHelper extends SQLiteOpenHelper {
 
     }
 
-    private static void insertWord(SQLiteDatabase db, String ruWord, String enWord) {
+    public static void insertWord(SQLiteDatabase db, String ruWord, String enWord) {
         ContentValues contentValues = new ContentValues();
         contentValues.put("ru_word", ruWord);
         contentValues.put("en_word", enWord);
