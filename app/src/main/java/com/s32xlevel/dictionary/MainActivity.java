@@ -29,7 +29,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(int position) {
                 Intent intent = new Intent(MainActivity.this, EditActivity.class);
-                intent.putExtra(EditActivity.EXTRA_WORD_ID, position);
+                intent.putExtra(EditActivity.EXTRA_WORD_ID, position + 1); // +1 for correct work with db
                 startActivity(intent);
             }
         });

@@ -77,7 +77,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
             SQLiteDatabase db = helper.getReadableDatabase();
 
             Cursor cursor = db.query("dictionary", new String[] {"_id"},
-                    null, null, null, null, null);
+                    null, null, null, null, "ru_word");
 
             int countRows = cursor.getCount();
 

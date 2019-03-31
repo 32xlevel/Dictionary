@@ -1,12 +1,16 @@
 package com.s32xlevel.dictionary;
 
 import android.content.Intent;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteException;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
+import android.widget.EditText;
 
 public class EditActivity extends AppCompatActivity {
 
@@ -18,9 +22,13 @@ public class EditActivity extends AppCompatActivity {
         setContentView(R.layout.activity_edit);
 
         Toolbar toolbar = findViewById(R.id.toolbar);
-        // correct toolbar title
-        toolbar.setTitle(getIntent().getIntExtra(EditActivity.EXTRA_WORD_ID, -1) != -1 ?
-                getString(R.string.edit_word_title) : getString(R.string.add_word_title));
+        // Settings dependent on EXTRA_WORD_ID
+        if (getIntent().getIntExtra(EditActivity.EXTRA_WORD_ID, -1) != -1) {
+            toolbar.setTitle(getString(R.string.edit_word_title));
+            fillEditViews();
+        } else {
+            toolbar.setTitle(getString(R.string.add_word_title));
+        }
         setSupportActionBar(toolbar);
         fillCorrectTextForButton();
     }
@@ -55,5 +63,28 @@ public class EditActivity extends AppCompatActivity {
 
         button.setText(getIntent().getIntExtra(EditActivity.EXTRA_WORD_ID, -1) != -1 ?
                 R.string.edit_button_text : R.string.add_button_text);
+    }
+
+    private void fillEditViews() throws SQLiteException {
+        EditText ruWordEdit = findViewById(R.id.ru_word_edit);
+        EditText enWordEdit = findViewById(R.id.en_word_edit);
+
+        DBHelper helper = new DBHelper(this);
+        SQLiteDatabase db = helper.getReadableDatabase();
+
+        Cursor cursor = db.query("dictionary",
+                new String[] {"ru_word", "en_word"},
+                "_id = ?",
+                new String[] {String.valueOf(getIntent().getIntExtra(EditActivity.EXTRA_WORD_ID, -1))},
+                null,
+                null,
+                "ru_word");
+
+        if (cursor.moveToFirst()) {
+            ruWordEdit.setText(cursor.getString(0));
+            enWordEdit.setText(cursor.getString(1));
+        }
+
+        cursor.close();
     }
 }
