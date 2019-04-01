@@ -1,4 +1,4 @@
-package com.s32xlevel.dictionary;
+package com.s32xlevel.dictionary.controller;
 
 import android.content.ContentValues;
 import android.content.Intent;
@@ -14,6 +14,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
+import com.s32xlevel.dictionary.R;
 import com.s32xlevel.dictionary.repository.DBHelper;
 
 public class EditActivity extends AppCompatActivity {
@@ -105,7 +106,7 @@ public class EditActivity extends AppCompatActivity {
         EditText enWordEdit = findViewById(R.id.en_word_edit);
 
         if (wordId == -1) {
-            DBHelper.insertWord(db, ruWordEdit.getText().toString(), enWordEdit.getText().toString());
+//            DBHelper.insertWord(db, ruWordEdit.getText().toString(), enWordEdit.getText().toString());
         } else {
             ContentValues contentValues = new ContentValues();
             contentValues.put("ru_word", ruWordEdit.getText().toString());

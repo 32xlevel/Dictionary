@@ -6,7 +6,6 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.widget.Toast;
 
-import com.s32xlevel.dictionary.MainActivity;
 import com.s32xlevel.dictionary.model.Word;
 
 import java.util.ArrayList;

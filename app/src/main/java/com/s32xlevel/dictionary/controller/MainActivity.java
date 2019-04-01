@@ -1,4 +1,4 @@
-package com.s32xlevel.dictionary;
+package com.s32xlevel.dictionary.controller;
 
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -13,7 +13,9 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.s32xlevel.dictionary.R;
 import com.s32xlevel.dictionary.repository.DBHelper;
+import com.s32xlevel.dictionary.util.RecyclerAdapter;
 
 public class MainActivity extends AppCompatActivity {
 
