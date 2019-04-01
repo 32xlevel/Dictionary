@@ -161,8 +161,9 @@ public class EditActivity extends AppCompatActivity {
     }
 
     private Word getWordFromIntent() {
-        if (getIntent().getExtras() != null) {
-            return repository.findByRuAndEnWords(getIntent().getExtras().getString(EXTRA_RU_WORD), getIntent().getExtras().getString(EXTRA_EN_WORD));
+        Bundle extras = getIntent().getExtras();
+        if (extras != null) {
+            return repository.findByRuAndEnWords(extras.getString(EXTRA_RU_WORD), extras.getString(EXTRA_EN_WORD));
         }
         return null;
     }

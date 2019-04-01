@@ -15,12 +15,14 @@ public class DBHelper extends SQLiteOpenHelper {
         super(context, DB_NAME, null, DB_VERSION);
     }
 
+    // unique for find by both words
     @Override
     public void onCreate(SQLiteDatabase db) {
         db.execSQL("CREATE TABLE dictionary ( " +
                 "_id INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 "ru_word TEXT NOT NULL, " +
-                "en_word TEXT NOT NULL );");
+                "en_word TEXT NOT NULL, " +
+                "CONSTRAINT unique_word_and_translate UNIQUE (ru_word, en_word));");
 
         insertWord(db, "Работа", "Work");
         insertWord(db, "Учеба", "Study");
