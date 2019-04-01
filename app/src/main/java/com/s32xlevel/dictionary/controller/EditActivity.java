@@ -15,22 +15,28 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import com.s32xlevel.dictionary.R;
+import com.s32xlevel.dictionary.model.Word;
 import com.s32xlevel.dictionary.repository.DBHelper;
+import com.s32xlevel.dictionary.repository.WordRepository;
+import com.s32xlevel.dictionary.repository.WordRepositoryImpl;
 
 public class EditActivity extends AppCompatActivity {
 
-    public static final String EXTRA_WORD_ID = "wordId";
-    private SQLiteDatabase db;
+//    public static final String EXTRA_WORD_ID = "wordId";
+    public static final String EXTRA_RU_WORD = "ruWord";
+    public static final String EXTRA_EN_WORD = "enWord";
+    private WordRepository repository;
 //    private static final String YANDEX_URL = "https://translate.yandex.net/api/v1.5/tr/translate?key=trnsl.1.1.20190323T155359Z.d61b1e6ec9c257cd.2e2e095ce68ff4fa10bafe21579e4fb1af687999";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit);
+        repository = new WordRepositoryImpl(this);
 
         Toolbar toolbar = findViewById(R.id.toolbar);
-        // Settings dependent on EXTRA_WORD_ID //
-        if (getIntent().getIntExtra(EditActivity.EXTRA_WORD_ID, -1) != -1) {
+        // Settings dependent on intent came //
+        if (getWordFromIntent() != null) {
             toolbar.setTitle(getString(R.string.edit_word_title));
             fillEditViews();
         } else {
@@ -39,26 +45,23 @@ public class EditActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         fillCorrectTextForButton();
         //                                    //
+
 //        onKeyPressTextToTranslate();
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        if (getIntent().getIntExtra(EditActivity.EXTRA_WORD_ID, -1) != -1) {
+        if (getWordFromIntent() != null) {
             getMenuInflater().inflate(R.menu.edit_menu, menu);
         }
         return super.onCreateOptionsMenu(menu);
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) throws SQLiteException {
+    public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_delete_word: {
-                db = new DBHelper(this).getWritableDatabase();
-                db.delete("dictionary",
-                        "_id = ?",
-                        new String[]{String.valueOf(getIntent().getIntExtra(EditActivity.EXTRA_WORD_ID, -1))});
-
+                repository.delete(getWordFromIntent().getId());
                 Intent intent = new Intent(this, MainActivity.class);
                 startActivity(intent);
                 return true;
@@ -69,49 +72,14 @@ public class EditActivity extends AppCompatActivity {
         }
     }
 
-    private void fillCorrectTextForButton() {
-        Button button = findViewById(R.id.add_edit_button);
-
-        button.setText(getIntent().getIntExtra(EditActivity.EXTRA_WORD_ID, -1) != -1 ?
-                R.string.edit_button_text : R.string.add_button_text);
-    }
-
-    private void fillEditViews() throws SQLiteException {
+    public void onClickAddEditButton(View view) {
         EditText ruWordEdit = findViewById(R.id.ru_word_edit);
         EditText enWordEdit = findViewById(R.id.en_word_edit);
 
-        DBHelper helper = new DBHelper(this);
-        db = helper.getReadableDatabase();
-
-        Cursor cursor = db.query("dictionary",
-                new String[]{"ru_word", "en_word"},
-                "_id = ?",
-                new String[]{String.valueOf(getIntent().getIntExtra(EditActivity.EXTRA_WORD_ID, -1))},
-                null,
-                null,
-                "ru_word");
-
-        if (cursor.moveToFirst()) {
-            ruWordEdit.setText(cursor.getString(0));
-            enWordEdit.setText(cursor.getString(1));
-        }
-
-        cursor.close();
-    }
-
-    public void onClickAddEditButton(View view) throws SQLiteException {
-        int wordId = getIntent().getIntExtra(EditActivity.EXTRA_WORD_ID, -1);
-        db = new DBHelper(this).getWritableDatabase();
-        EditText ruWordEdit = findViewById(R.id.ru_word_edit);
-        EditText enWordEdit = findViewById(R.id.en_word_edit);
-
-        if (wordId == -1) {
-//            DBHelper.insertWord(db, ruWordEdit.getText().toString(), enWordEdit.getText().toString());
+        if (getWordFromIntent() == null) {
+            repository.save(new Word(null, ruWordEdit.getText().toString(), enWordEdit.getText().toString()));
         } else {
-            ContentValues contentValues = new ContentValues();
-            contentValues.put("ru_word", ruWordEdit.getText().toString());
-            contentValues.put("en_word", enWordEdit.getText().toString());
-            db.update("dictionary", contentValues, "_id = ?", new String[]{String.valueOf(wordId)});
+            repository.save(new Word(getWordFromIntent().getId(), ruWordEdit.getText().toString(), enWordEdit.getText().toString()));
         }
 
         Intent intent = new Intent(this, MainActivity.class);
@@ -211,4 +179,26 @@ public class EditActivity extends AppCompatActivity {
             this.text = text;
         }
     }*/
+
+    private void fillCorrectTextForButton() {
+        Button button = findViewById(R.id.add_edit_button);
+
+        button.setText(getWordFromIntent() != null ? R.string.edit_button_text : R.string.add_button_text);
+    }
+
+    private void fillEditViews() throws SQLiteException {
+        EditText ruWordEdit = findViewById(R.id.ru_word_edit);
+        EditText enWordEdit = findViewById(R.id.en_word_edit);
+
+        Word word = getWordFromIntent();
+        ruWordEdit.setText(word.getRuWord());
+        enWordEdit.setText(word.getEnWord());
+    }
+
+    private Word getWordFromIntent() {
+        if (getIntent().getExtras() != null) {
+            return repository.findByRuAndEnWords(getIntent().getExtras().getString(EXTRA_RU_WORD), getIntent().getExtras().getString(EXTRA_EN_WORD));
+        }
+        return null;
+    }
 }

@@ -3,6 +3,7 @@ package com.s32xlevel.dictionary.repository;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
 import android.widget.Toast;
 
@@ -79,12 +80,14 @@ public class WordRepositoryImpl implements WordRepository {
             Cursor cursor = readeableDb.query(DBHelper.TABLE_NAME,
                     new String[]{"_id", "ru_word", "en_word"},
                     "_id = ?",
-                    new String[] {String.valueOf(id)},
+                    new String[]{String.valueOf(id)},
                     null, null, null);
+            Word word = null;
             if (cursor.moveToFirst()) {
-                return new Word(cursor.getInt(0), cursor.getString(1), cursor.getString(2));
+                word = new Word(cursor.getInt(0), cursor.getString(1), cursor.getString(2));
             }
             cursor.close();
+            return word;
         } catch (Exception e) {
             Toast.makeText(context, "database unavailable", Toast.LENGTH_LONG).show();
         }
@@ -98,7 +101,7 @@ public class WordRepositoryImpl implements WordRepository {
             Cursor cursor = readeableDb.query(DBHelper.TABLE_NAME,
                     new String[]{"_id", "ru_word", "en_word"},
                     "ru_word = ? AND en_word = ?",
-                    new String[] {ruWord, enWord},
+                    new String[]{ruWord, enWord},
                     null, null, null);
             if (cursor.moveToFirst()) {
                 return new Word(cursor.getInt(0), cursor.getString(1), cursor.getString(2));
@@ -108,5 +111,11 @@ public class WordRepositoryImpl implements WordRepository {
             Toast.makeText(context, "database unavailable", Toast.LENGTH_LONG).show();
         }
         return null;
+    }
+
+    @Override
+    public int countWords() {
+        readeableDb = new DBHelper(context).getReadableDatabase();
+        return (int) DatabaseUtils.queryNumEntries(readeableDb, DBHelper.TABLE_NAME);
     }
 }

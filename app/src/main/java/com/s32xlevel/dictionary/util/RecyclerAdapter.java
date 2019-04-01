@@ -13,22 +13,35 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.s32xlevel.dictionary.R;
+import com.s32xlevel.dictionary.model.Word;
 import com.s32xlevel.dictionary.repository.DBHelper;
+import com.s32xlevel.dictionary.repository.WordRepository;
+import com.s32xlevel.dictionary.repository.WordRepositoryImpl;
+
+import java.util.List;
 
 public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHolder> {
 
+    // was problem: discrepancy ID in list and in DB
+    // fix: onClick(word1, word2)
     public interface Listener {
-        void onClick(int position);
-        boolean onLongClick(int position);
+//        void onClick(int position);
+        void onClick(String ruWord, String enWord);
+
+        boolean onLongClick(String ruWord, String enWord);
     }
 
     private Listener listener;
 
     private Context context;
 
+    private WordRepository repository;
+
     public RecyclerAdapter(Context context) {
         this.context = context;
+        repository = new WordRepositoryImpl(context);
     }
+
 
     @NonNull
     @Override
@@ -40,35 +53,19 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder viewHolder, final int position) {
-        DBHelper helper = new DBHelper(context);
+    public void onBindViewHolder(@NonNull ViewHolder viewHolder, int position) {
 
-        try {
-            SQLiteDatabase db = helper.getReadableDatabase();
-            Cursor cursor = db.query("dictionary",
-                    new String[] {"ru_word", "en_word"},
-                    "_id = ?",
-                    new String[] {String.valueOf(position + 1)},
-                    null,
-                    null,
-                    "ru_word");
+        List<Word> words = repository.getAll();
+        final Word word = words.get(position);
 
-            if (cursor.moveToFirst()) {
-                viewHolder.ruWord.setText(cursor.getString(0));
-                viewHolder.enWord.setText(cursor.getString(1));
-            }
-
-            cursor.close();
-
-        } catch (SQLiteException e) {
-            Toast.makeText(context, "database unavailable", Toast.LENGTH_LONG).show();
-        }
+        viewHolder.ruWord.setText(word.getRuWord());
+        viewHolder.enWord.setText(word.getEnWord());
 
         viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (listener != null) {
-                    listener.onClick(position + 1); // +1 for correct work with db
+                    listener.onClick(word.getRuWord(), word.getEnWord());
                 }
             }
         });
@@ -77,7 +74,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
             @Override
             public boolean onLongClick(View v) {
                 if (listener != null) {
-                    return listener.onLongClick(position + 1); // +1 for correct work with db
+                    return listener.onLongClick(word.getRuWord(), word.getEnWord());
                 }
                 return false;
             }
@@ -86,22 +83,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
 
     @Override
     public int getItemCount() {
-        DBHelper helper = new DBHelper(context);
-        try {
-            SQLiteDatabase db = helper.getReadableDatabase();
-
-            Cursor cursor = db.query("dictionary", new String[] {"_id"},
-                    null, null, null, null, "ru_word");
-
-            int countRows = cursor.getCount();
-
-            cursor.close();
-
-            return countRows;
-        } catch (SQLiteException e) {
-            Toast.makeText(context, "database unavailable", Toast.LENGTH_LONG).show();
-        }
-        return 0;
+        return repository.countWords();
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {

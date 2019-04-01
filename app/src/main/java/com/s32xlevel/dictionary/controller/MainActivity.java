@@ -2,7 +2,6 @@ package com.s32xlevel.dictionary.controller;
 
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.database.sqlite.SQLiteDatabase;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -14,15 +13,20 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.s32xlevel.dictionary.R;
-import com.s32xlevel.dictionary.repository.DBHelper;
+import com.s32xlevel.dictionary.model.Word;
+import com.s32xlevel.dictionary.repository.WordRepository;
+import com.s32xlevel.dictionary.repository.WordRepositoryImpl;
 import com.s32xlevel.dictionary.util.RecyclerAdapter;
 
 public class MainActivity extends AppCompatActivity {
+
+    private WordRepository repository;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        repository = new WordRepositoryImpl(this);
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -34,25 +38,25 @@ public class MainActivity extends AppCompatActivity {
         RecyclerAdapter adapter = new RecyclerAdapter(this);
         adapter.setListener(new RecyclerAdapter.Listener() {
             @Override
-            public void onClick(int position) {
+            public void onClick(String ruWord, String enWord) {
                 Intent intent = new Intent(MainActivity.this, EditActivity.class);
-                intent.putExtra(EditActivity.EXTRA_WORD_ID, position);
+                intent.putExtra(EditActivity.EXTRA_RU_WORD, ruWord);
+                intent.putExtra(EditActivity.EXTRA_EN_WORD, enWord);
                 startActivity(intent);
             }
 
             @Override
-            public boolean onLongClick(final int position) {
+            public boolean onLongClick(final String ruWord, final String enWord) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
                 builder.setTitle(R.string.dialog_title)
-//                        .setMessage("")
                         .setCancelable(true)
                         .setPositiveButton(R.string.dialog_yes, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                SQLiteDatabase db = new DBHelper(MainActivity.this).getWritableDatabase();
-                                db.delete("dictionary",
-                                        "_id = ?",
-                                        new String[]{String.valueOf(position)});
+                                Word word = repository.findByRuAndEnWords(ruWord, enWord);
+                                repository.delete(word.getId());
+
+                                // update view
                                 Intent intent = new Intent(MainActivity.this, MainActivity.class);
                                 startActivity(intent);
                             }

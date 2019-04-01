@@ -7,7 +7,7 @@ public class Word {
 
     private String enWord;
 
-    public Word(int id, String ruWord, String enWord) {
+    public Word(Integer id, String ruWord, String enWord) {
         this.id = id;
         this.ruWord = ruWord;
         this.enWord = enWord;

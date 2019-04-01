@@ -14,4 +14,6 @@ public interface WordRepository {
     Word findById(int id);
 
     Word findByRuAndEnWords(String ruWord, String enWord);
+
+    int countWords();
 }
