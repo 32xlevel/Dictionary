@@ -1,4 +1,4 @@
-package com.s32xlevel.dictionary;
+package com.s32xlevel.dictionary.repository;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -7,7 +7,8 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 public class DBHelper extends SQLiteOpenHelper {
 
-    private static final String DB_NAME = "dictionary";
+    private static final String DB_NAME = "DICTIONARY";
+    public static final String TABLE_NAME = "dictionary";
     private static final int DB_VERSION = 1;
 
     public DBHelper(Context context) {
@@ -31,10 +32,10 @@ public class DBHelper extends SQLiteOpenHelper {
 
     }
 
-    public static void insertWord(SQLiteDatabase db, String ruWord, String enWord) {
+    private static void insertWord(SQLiteDatabase db, String ruWord, String enWord) {
         ContentValues contentValues = new ContentValues();
         contentValues.put("ru_word", ruWord);
         contentValues.put("en_word", enWord);
-        db.insert("dictionary", null, contentValues);
+        db.insert(TABLE_NAME, null, contentValues);
     }
 }

@@ -13,6 +13,8 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.s32xlevel.dictionary.repository.DBHelper;
+
 public class MainActivity extends AppCompatActivity {
 
     @Override

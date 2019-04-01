@@ -1,7 +1,7 @@
-package com.s32xlevel.dictionary;
+package com.s32xlevel.dictionary.model;
 
 public class Word {
-    private int id;
+    private Integer id;
 
     private String ruWord;
 
@@ -13,11 +13,11 @@ public class Word {
         this.enWord = enWord;
     }
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
