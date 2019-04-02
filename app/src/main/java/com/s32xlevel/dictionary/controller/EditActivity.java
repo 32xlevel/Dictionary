@@ -22,6 +22,7 @@ import com.s32xlevel.dictionary.R;
 import com.s32xlevel.dictionary.model.Word;
 import com.s32xlevel.dictionary.repository.WordRepository;
 import com.s32xlevel.dictionary.repository.WordRepositoryImpl;
+import com.s32xlevel.dictionary.util.ValidationUtil;
 import com.s32xlevel.dictionary.util.YandexTranslateAPI;
 
 import java.io.IOException;
@@ -109,6 +110,9 @@ public class EditActivity extends AppCompatActivity {
 
             @Override
             public void afterTextChanged(Editable s) {
+                if (ValidationUtil.isBlank(s.toString())) {
+                    Toast.makeText(EditActivity.this, R.string.validation_null, Toast.LENGTH_SHORT).show();
+                }
             }
         });
     }

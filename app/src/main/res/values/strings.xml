@@ -2,7 +2,7 @@
     <string name="app_name">Словарь</string>
     <string name="ru_word_edit_hint">Слово</string>
     <string name="en_word_edit_hint">Перевод</string>
-    <string name="hints">Предложения:</string>
+    <string name="hints">Варианты перевода:</string>
     <string name="add_word_title">Добавить слово</string>
     <string name="delete_word_title">Удалить слово</string>
     <string name="edit_word_title">Изменить слово</string>
@@ -11,4 +11,5 @@
     <string name="dialog_title">Удалить слово?</string>
     <string name="dialog_yes">Да</string>
     <string name="dialog_no">Нет</string>
+    <string name="validation_null">Заполните все поля</string>
 </resources>

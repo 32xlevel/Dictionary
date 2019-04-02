@@ -5,12 +5,17 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteException;
 import android.widget.Toast;
 
+import com.s32xlevel.dictionary.R;
 import com.s32xlevel.dictionary.model.Word;
+import com.s32xlevel.dictionary.util.ValidationUtil;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.s32xlevel.dictionary.util.ValidationUtil.isBlank;
 
 public class WordRepositoryImpl implements WordRepository {
 
@@ -47,16 +52,24 @@ public class WordRepositoryImpl implements WordRepository {
     public Word save(Word word) {
         try {
             writableDb = new DBHelper(context).getWritableDatabase();
+
+            if (isBlank(word.getRuWord()) || isBlank(word.getEnWord())) {
+                throw new IllegalArgumentException();
+            }
+
             ContentValues values = new ContentValues();
             values.put("ru_word", word.getRuWord());
             values.put("en_word", word.getEnWord());
+
             if (word.getId() == null) {
                 word.setId((int) writableDb.insert(DBHelper.TABLE_NAME, null, values));
             } else {
                 writableDb.update(DBHelper.TABLE_NAME, values, "_id = ?", new String[]{String.valueOf(word.getId())});
             }
-        } catch (Exception e) {
+        } catch (SQLiteException e) {
             Toast.makeText(context, "database unavailable", Toast.LENGTH_LONG).show();
+        } catch (IllegalArgumentException e) {
+            Toast.makeText(context, R.string.validation_null, Toast.LENGTH_LONG).show();
         }
 
         return word;
