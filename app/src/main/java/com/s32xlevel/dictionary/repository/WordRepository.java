@@ -9,7 +9,7 @@ public interface WordRepository {
 
     Word save(Word word);
 
-    boolean delete(int id);
+    void delete(int id);
 
     Word findById(int id);
 

@@ -138,7 +138,7 @@ public class EditActivity extends AppCompatActivity {
         // param[0] - text to translate
         @Override
         protected String[] doInBackground(String... params) {
-            if (params[0] == null || params[0].equals("")) {
+            if (ValidationUtil.isBlank(params[0])) {
                 return new String[]{" "};
             }
             try {

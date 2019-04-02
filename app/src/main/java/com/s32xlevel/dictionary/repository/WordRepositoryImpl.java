@@ -10,7 +10,6 @@ import android.widget.Toast;
 
 import com.s32xlevel.dictionary.R;
 import com.s32xlevel.dictionary.model.Word;
-import com.s32xlevel.dictionary.util.ValidationUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -76,13 +75,12 @@ public class WordRepositoryImpl implements WordRepository {
     }
 
     @Override
-    public boolean delete(int id) {
+    public void delete(int id) {
         try {
             writableDb = new DBHelper(context).getWritableDatabase();
-            return writableDb.delete(DBHelper.TABLE_NAME, "_id = ?", new String[]{String.valueOf(id)}) != 0;
+            writableDb.delete(DBHelper.TABLE_NAME, "_id = ?", new String[]{String.valueOf(id)});
         } catch (Exception e) {
             Toast.makeText(context, "database unavailable", Toast.LENGTH_LONG).show();
-            return false;
         }
     }
 

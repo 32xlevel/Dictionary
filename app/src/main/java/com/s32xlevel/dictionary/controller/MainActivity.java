@@ -56,7 +56,7 @@ public class MainActivity extends AppCompatActivity {
                                 Word word = repository.findByRuAndEnWords(ruWord, enWord);
                                 repository.delete(word.getId());
 
-                                // update view
+                                // update view. How else?
                                 Intent intent = new Intent(MainActivity.this, MainActivity.class);
                                 startActivity(intent);
                             }
