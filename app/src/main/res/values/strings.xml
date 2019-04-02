@@ -12,4 +12,6 @@
     <string name="dialog_yes">Да</string>
     <string name="dialog_no">Нет</string>
     <string name="validation_null">Заполните все поля</string>
+    <string name="db_unavailable">Database unavailable</string>
+    <string name="api_problem">Problem with translate API</string>
 </resources>

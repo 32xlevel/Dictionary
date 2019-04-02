@@ -107,7 +107,7 @@ public class EditActivity extends AppCompatActivity {
                 try {
                     fillListHints(s.toString());
                 } catch (Exception e) {
-                    Toast.makeText(EditActivity.this, "Problem with translate API", Toast.LENGTH_LONG).show();
+                    Toast.makeText(EditActivity.this, R.string.api_problem, Toast.LENGTH_LONG).show();
                 }
             }
 

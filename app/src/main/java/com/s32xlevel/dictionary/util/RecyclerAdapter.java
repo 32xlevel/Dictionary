@@ -1,20 +1,15 @@
 package com.s32xlevel.dictionary.util;
 
 import android.content.Context;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteException;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.s32xlevel.dictionary.R;
 import com.s32xlevel.dictionary.model.Word;
-import com.s32xlevel.dictionary.repository.DBHelper;
 import com.s32xlevel.dictionary.repository.WordRepository;
 import com.s32xlevel.dictionary.repository.WordRepositoryImpl;
 

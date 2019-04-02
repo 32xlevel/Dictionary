@@ -42,7 +42,7 @@ public class WordRepositoryImpl implements WordRepository {
             cursor.close();
             return words;
         } catch (SQLiteException e) {
-            Toast.makeText(context, "database unavailable", Toast.LENGTH_LONG).show();
+            Toast.makeText(context, R.string.db_unavailable, Toast.LENGTH_LONG).show();
         }
         return new ArrayList<>();
     }
@@ -66,7 +66,7 @@ public class WordRepositoryImpl implements WordRepository {
                 writableDb.update(DBHelper.TABLE_NAME, values, "_id = ?", new String[]{String.valueOf(word.getId())});
             }
         } catch (SQLiteException e) {
-            Toast.makeText(context, "database unavailable", Toast.LENGTH_LONG).show();
+            Toast.makeText(context, R.string.db_unavailable, Toast.LENGTH_LONG).show();
         } catch (IllegalArgumentException e) {
             Toast.makeText(context, R.string.validation_null, Toast.LENGTH_LONG).show();
         }
@@ -80,7 +80,7 @@ public class WordRepositoryImpl implements WordRepository {
             writableDb = new DBHelper(context).getWritableDatabase();
             writableDb.delete(DBHelper.TABLE_NAME, "_id = ?", new String[]{String.valueOf(id)});
         } catch (SQLiteException e) {
-            Toast.makeText(context, "database unavailable", Toast.LENGTH_LONG).show();
+            Toast.makeText(context, R.string.db_unavailable, Toast.LENGTH_LONG).show();
         }
     }
 
@@ -100,7 +100,7 @@ public class WordRepositoryImpl implements WordRepository {
             cursor.close();
             return word;
         } catch (SQLiteException e) {
-            Toast.makeText(context, "database unavailable", Toast.LENGTH_LONG).show();
+            Toast.makeText(context, R.string.db_unavailable, Toast.LENGTH_LONG).show();
         }
         return null;
     }
@@ -121,7 +121,7 @@ public class WordRepositoryImpl implements WordRepository {
             cursor.close();
             return word;
         } catch (SQLiteException e) {
-            Toast.makeText(context, "database unavailable", Toast.LENGTH_LONG).show();
+            Toast.makeText(context, R.string.db_unavailable, Toast.LENGTH_LONG).show();
         }
         return null;
     }
