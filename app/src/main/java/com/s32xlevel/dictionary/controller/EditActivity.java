@@ -25,7 +25,8 @@ import com.s32xlevel.dictionary.repository.WordRepositoryImpl;
 import com.s32xlevel.dictionary.util.ValidationUtil;
 import com.s32xlevel.dictionary.util.YandexTranslateAPI;
 
-import java.io.IOException;
+import java.util.Collections;
+import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 public class EditActivity extends AppCompatActivity {
@@ -123,7 +124,7 @@ public class EditActivity extends AppCompatActivity {
     private void fillListHints(String text) throws ExecutionException, InterruptedException {
         ListView listHints = findViewById(R.id.list_hints);
         final EditText enWord = findViewById(R.id.en_word_edit);
-        final String[] hints = new AsyncRequest().execute(text).get();
+        final List<String> hints = new AsyncRequest().execute(text).get();
 
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, hints);
         listHints.setAdapter(adapter);
@@ -131,22 +132,22 @@ public class EditActivity extends AppCompatActivity {
         listHints.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                enWord.setText(hints[position]);
+                enWord.setText(hints.get(position));
             }
         });
     }
 
 
-    private class AsyncRequest extends AsyncTask<String, Void, String[]> {
+    private class AsyncRequest extends AsyncTask<String, Void, List<String>> {
         @Override
-        protected String[] doInBackground(String... params) {
+        protected List<String> doInBackground(String... params) {
             if (ValidationUtil.isBlank(params[0])) {
-                return new String[]{" "};
+                return Collections.emptyList();
             }
             try {
                 return YandexTranslateAPI.translateText(params[0]);
-            } catch (IOException e) {
-                return new String[]{" "};
+            } catch (Exception e) {
+                return Collections.emptyList();
             }
         }
     }
