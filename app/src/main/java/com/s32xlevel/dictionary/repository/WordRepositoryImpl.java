@@ -19,7 +19,7 @@ import static com.s32xlevel.dictionary.util.ValidationUtil.isBlank;
 public class WordRepositoryImpl implements WordRepository {
 
     private Context context;
-    private SQLiteDatabase readeableDb;
+    private SQLiteDatabase readableDb;
     private SQLiteDatabase writableDb;
 
     public WordRepositoryImpl(Context context) {
@@ -29,8 +29,8 @@ public class WordRepositoryImpl implements WordRepository {
     @Override
     public List<Word> getAll() {
         try {
-            readeableDb = new DBHelper(context).getReadableDatabase();
-            Cursor cursor = readeableDb.query(DBHelper.TABLE_NAME,
+            readableDb = new DBHelper(context).getReadableDatabase();
+            Cursor cursor = readableDb.query(DBHelper.TABLE_NAME,
                     new String[]{"_id", "ru_word", "en_word"},
                     null, null, null, null, "ru_word");
 
@@ -87,8 +87,8 @@ public class WordRepositoryImpl implements WordRepository {
     @Override
     public Word findById(int id) {
         try {
-            readeableDb = new DBHelper(context).getReadableDatabase();
-            Cursor cursor = readeableDb.query(DBHelper.TABLE_NAME,
+            readableDb = new DBHelper(context).getReadableDatabase();
+            Cursor cursor = readableDb.query(DBHelper.TABLE_NAME,
                     new String[]{"_id", "ru_word", "en_word"},
                     "_id = ?",
                     new String[]{String.valueOf(id)},
@@ -108,8 +108,8 @@ public class WordRepositoryImpl implements WordRepository {
     @Override
     public Word findByRuAndEnWords(String ruWord, String enWord) {
         try {
-            readeableDb = new DBHelper(context).getReadableDatabase();
-            Cursor cursor = readeableDb.query(DBHelper.TABLE_NAME,
+            readableDb = new DBHelper(context).getReadableDatabase();
+            Cursor cursor = readableDb.query(DBHelper.TABLE_NAME,
                     new String[]{"_id", "ru_word", "en_word"},
                     "ru_word = ? AND en_word = ?",
                     new String[]{ruWord, enWord},
@@ -126,7 +126,7 @@ public class WordRepositoryImpl implements WordRepository {
 
     @Override
     public int countWords() {
-        readeableDb = new DBHelper(context).getReadableDatabase();
-        return (int) DatabaseUtils.queryNumEntries(readeableDb, DBHelper.TABLE_NAME);
+        readableDb = new DBHelper(context).getReadableDatabase();
+        return (int) DatabaseUtils.queryNumEntries(readableDb, DBHelper.TABLE_NAME);
     }
 }
