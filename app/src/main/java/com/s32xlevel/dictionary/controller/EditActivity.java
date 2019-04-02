@@ -1,7 +1,6 @@
 package com.s32xlevel.dictionary.controller;
 
 import android.content.Intent;
-import android.database.sqlite.SQLiteException;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -44,7 +43,7 @@ public class EditActivity extends AppCompatActivity {
         // Settings dependent on intent came //
         if (getWordFromIntent() != null) {
             toolbar.setTitle(getString(R.string.edit_word_title));
-            fillEditViews();
+            fillEditTexts();
         } else {
             toolbar.setTitle(getString(R.string.add_word_title));
         }
@@ -135,7 +134,6 @@ public class EditActivity extends AppCompatActivity {
 
 
     private class AsyncRequest extends AsyncTask<String, Void, String[]> {
-        // param[0] - text to translate
         @Override
         protected String[] doInBackground(String... params) {
             if (ValidationUtil.isBlank(params[0])) {
@@ -144,7 +142,7 @@ public class EditActivity extends AppCompatActivity {
             try {
                 return YandexTranslateAPI.translateText(params[0]);
             } catch (IOException e) {
-                return new String[]{};
+                return new String[]{" "};
             }
         }
     }
@@ -155,7 +153,7 @@ public class EditActivity extends AppCompatActivity {
         button.setText(getWordFromIntent() != null ? R.string.edit_button_text : R.string.add_button_text);
     }
 
-    private void fillEditViews() throws SQLiteException {
+    private void fillEditTexts() {
         EditText ruWordEdit = findViewById(R.id.ru_word_edit);
         EditText enWordEdit = findViewById(R.id.en_word_edit);
 

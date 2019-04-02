@@ -22,7 +22,7 @@ import java.util.List;
 
 public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHolder> {
 
-    // was problem: discrepancy ID in list and in DB
+    // Была проблема: несоответсвие position и ID в базе
     // fix: onClick(word1, word2)
     public interface Listener {
 //        void onClick(int position);

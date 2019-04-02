@@ -15,7 +15,6 @@ public class DBHelper extends SQLiteOpenHelper {
         super(context, DB_NAME, null, DB_VERSION);
     }
 
-    // unique for find by both words
     @Override
     public void onCreate(SQLiteDatabase db) {
         db.execSQL("CREATE TABLE dictionary ( " +

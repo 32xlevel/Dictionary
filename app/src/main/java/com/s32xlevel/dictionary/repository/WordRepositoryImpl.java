@@ -41,7 +41,7 @@ public class WordRepositoryImpl implements WordRepository {
             }
             cursor.close();
             return words;
-        } catch (Exception e) {
+        } catch (SQLiteException e) {
             Toast.makeText(context, "database unavailable", Toast.LENGTH_LONG).show();
         }
         return new ArrayList<>();
@@ -79,7 +79,7 @@ public class WordRepositoryImpl implements WordRepository {
         try {
             writableDb = new DBHelper(context).getWritableDatabase();
             writableDb.delete(DBHelper.TABLE_NAME, "_id = ?", new String[]{String.valueOf(id)});
-        } catch (Exception e) {
+        } catch (SQLiteException e) {
             Toast.makeText(context, "database unavailable", Toast.LENGTH_LONG).show();
         }
     }
@@ -99,7 +99,7 @@ public class WordRepositoryImpl implements WordRepository {
             }
             cursor.close();
             return word;
-        } catch (Exception e) {
+        } catch (SQLiteException e) {
             Toast.makeText(context, "database unavailable", Toast.LENGTH_LONG).show();
         }
         return null;
@@ -114,11 +114,13 @@ public class WordRepositoryImpl implements WordRepository {
                     "ru_word = ? AND en_word = ?",
                     new String[]{ruWord, enWord},
                     null, null, null);
+            Word word = null;
             if (cursor.moveToFirst()) {
-                return new Word(cursor.getInt(0), cursor.getString(1), cursor.getString(2));
+                word = new Word(cursor.getInt(0), cursor.getString(1), cursor.getString(2));
             }
             cursor.close();
-        } catch (Exception e) {
+            return word;
+        } catch (SQLiteException e) {
             Toast.makeText(context, "database unavailable", Toast.LENGTH_LONG).show();
         }
         return null;
