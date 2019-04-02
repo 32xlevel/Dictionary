@@ -2,6 +2,7 @@ package com.s32xlevel.dictionary.controller;
 
 import android.content.Intent;
 import android.os.AsyncTask;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -47,9 +48,12 @@ public class EditActivity extends AppCompatActivity {
         } else {
             toolbar.setTitle(getString(R.string.add_word_title));
         }
-        setSupportActionBar(toolbar);
         fillCorrectTextForButton();
         //                                    //
+
+        setSupportActionBar(toolbar);
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setDisplayHomeAsUpEnabled(true);
 
         onKeyPressTextToTranslate();
     }
