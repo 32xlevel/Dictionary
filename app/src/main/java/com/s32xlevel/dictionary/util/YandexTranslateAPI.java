@@ -25,15 +25,15 @@ public class YandexTranslateAPI {
                 .build();
 
         String json = client.newCall(request).execute().body().string();
-        List<String> translates_ = new ArrayList<>();
-        YandexTranslateResponse.Translation translates = new Gson().fromJson(json, YandexTranslateResponse.class).getDef().get(0).getTr().get(0);
-        List<YandexTranslateResponse.Synonym> syn = translates.getSyn();
+        List<String> translates = new ArrayList<>();
+        YandexTranslateResponse.Translation response = new Gson().fromJson(json, YandexTranslateResponse.class).getDef().get(0).getTr().get(0);
+        List<YandexTranslateResponse.Synonym> syn = response.getSyn();
 
-        translates_.add(translates.getText());
+        translates.add(response.getText());
         for (int i = 0; i < syn.size(); i++) {
-            translates_.add(syn.get(i).getText());
+            translates.add(syn.get(i).getText());
         }
-        return translates_;
+        return translates;
     }
 
     private class YandexTranslateResponse {
