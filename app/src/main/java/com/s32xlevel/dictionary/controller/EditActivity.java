@@ -72,8 +72,7 @@ public class EditActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             case R.id.action_delete_word: {
                 repository.delete(getWordFromIntent().getId());
-                Intent intent = new Intent(this, MainActivity.class);
-                startActivity(intent);
+                finish();
                 return true;
             }
             default: {

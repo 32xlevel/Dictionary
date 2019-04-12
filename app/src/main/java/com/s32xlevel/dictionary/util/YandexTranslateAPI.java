@@ -17,7 +17,7 @@ public class YandexTranslateAPI {
     }
 
     private static final String URL = "https://dictionary.yandex.net/api/v1/dicservice.json/lookup?key=dict.1.1.20190402T164729Z.a83e6e680fd2e07b.ade13450ef476ede88606f1796340fcd293b2ce6";
-    private static OkHttpClient client = new OkHttpClient();
+    private static final OkHttpClient client = new OkHttpClient();
 
     public static List<String> translateText(String text) throws IOException {
         Request request = new Request.Builder()

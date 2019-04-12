@@ -35,7 +35,7 @@ public class MainActivity extends AppCompatActivity {
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
 
-        RecyclerAdapter adapter = new RecyclerAdapter(this);
+        final RecyclerAdapter adapter = new RecyclerAdapter(this);
         adapter.setListener(new RecyclerAdapter.Listener() {
             @Override
             public void onClick(String ruWord, String enWord) {
@@ -55,10 +55,7 @@ public class MainActivity extends AppCompatActivity {
                             public void onClick(DialogInterface dialog, int which) {
                                 Word word = repository.findByRuAndEnWords(ruWord, enWord);
                                 repository.delete(word.getId());
-
-                                // update view. How else?
-                                Intent intent = new Intent(MainActivity.this, MainActivity.class);
-                                startActivity(intent);
+                                adapter.notifyDataSetChanged();
                             }
                         })
                         .setNegativeButton(R.string.dialog_no, new DialogInterface.OnClickListener() {
